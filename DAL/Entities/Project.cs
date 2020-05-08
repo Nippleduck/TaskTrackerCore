@@ -10,7 +10,7 @@ namespace DAL.Entities
     {
         public Project()
         {
-            Tasks = new HashSet<Task>();
+            Tasks = new HashSet<ProjectTask>();
             Users = new HashSet<User>();
         }
 
@@ -21,7 +21,7 @@ namespace DAL.Entities
 
         public virtual User Manager { get; set; }
 
-        public virtual ICollection<Task> Tasks { get; set; }
+        public virtual ICollection<ProjectTask> Tasks { get; set; }
         public virtual ICollection<User> Users { get; set; }
         
     }

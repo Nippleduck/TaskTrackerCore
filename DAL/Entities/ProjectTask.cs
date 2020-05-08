@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DAL.Entities
 {
-    public class Task : BaseEntity<int>
+    public class ProjectTask : BaseEntity<int>
     {
         public string Title { get; set; }
         public string Description { get; set; }
@@ -13,7 +13,7 @@ namespace DAL.Entities
         public int DateInfoId { get; set; }
         public int UserId { get; set; }
 
-        public virtual TaskStatus TaskStatus { get; set; }
+        public virtual ProjectTaskStatus TaskStatus { get; set; }
         public virtual DateInfo DateInfo { get; set; }
         public virtual User Performer { get; set; }
 

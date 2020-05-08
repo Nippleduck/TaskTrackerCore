@@ -7,7 +7,7 @@ using System.Text;
 
 namespace BLL.DTO
 {
-    public class TaskDTO : IMapFrom<Task>
+    public class ProjectTaskDTO : IMapFrom<ProjectTask>
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -19,9 +19,9 @@ namespace BLL.DTO
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Task, TaskDTO>()
+            profile.CreateMap<ProjectTask, ProjectTaskDTO>()
                 .ForMember(d => d.ExecutedPercent, opt => opt.MapFrom(src => src.TaskStatus.ExecutedPercent))
-                .ForMember(d => d.State, opt => opt.MapFrom(src => src.TaskStatus.State))
+                .ForMember(d => d.State, opt => opt.MapFrom(src => (int)src.TaskStatus.State))
                 .ForMember(d => d.BeginDate, opt => opt.MapFrom(src => src.DateInfo.BeginDate))
                 .ForMember(d => d.Deadline, opt => opt.MapFrom(src => src.DateInfo.Deadline))
                 .ReverseMap();

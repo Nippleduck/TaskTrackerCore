@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
-    interface IRepository<T, TId> where T : BaseEntity<TId>
+    public interface IRepository<T> where T : BaseEntity<int>
     {
-        Task<T> GetByIdAsync(TId id);
+        Task<T> GetByIdAsync(int id);
         Task<List<T>> GetAllAsync();
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);

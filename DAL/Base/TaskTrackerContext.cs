@@ -14,10 +14,10 @@ namespace DAL.Base
             : base(options) { }
 
         public DbSet<Project> Projects { get; set; }
-        public DbSet<Task> Tasks { get; set; }
+        public DbSet<ProjectTask> Tasks { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<DateInfo> DateInfos { get; set; }
-        public DbSet<TaskStatus> TaskStatuses { get; set; }
+        public DbSet<ProjectTaskStatus> TaskStatuses { get; set; }
         public DbSet<UserContacts> UserContacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

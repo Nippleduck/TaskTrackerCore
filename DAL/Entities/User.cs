@@ -7,12 +7,12 @@ namespace DAL.Entities
 {
     public class User : BaseEntity<int>
     {
-        public User() => Tasks = new HashSet<Task>();
+        public User() => Tasks = new HashSet<ProjectTask>();
 
         public string Name { get; set; }
         public string UserContactsId { get; set; }
 
         public UserContacts UserContacts { get; set; }
-        public ICollection<Task> Tasks { get; set; }
+        public ICollection<ProjectTask> Tasks { get; set; }
     }
 }

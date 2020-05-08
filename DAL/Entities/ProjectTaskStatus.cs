@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DAL.Entities
 {
-    public class TaskStatus : BaseEntity<int>
+    public class ProjectTaskStatus : BaseEntity<int>
     {
         public decimal ExecutedPercent { get; set; }
         public TaskState State { get; set; }
