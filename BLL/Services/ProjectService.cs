@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using BLL.DTO;
 using BLL.Services.Base;
-using DAL.Base;
+using DAL.Entities;
+using DAL.Entities.Enums;
 using DAL.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -41,11 +42,122 @@ namespace BLL.Services
             }
             else
             {
-                //TO DO: same
+                //TO DO: exception {not found}
             }
         }
 
+        public async Task ChangeDescriptionAsync(ProjectDTO projectDTO, string description)
+        {
+            var searchedProject = await _unitOfWork.ProjectRepository
+                .GetByIdAsync(projectDTO.Id);
 
+            if(searchedProject != null)
+            {
+                searchedProject.Description = description;
+
+                await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
+            }
+            else
+            {
+                //exception {not found}
+            }
+        }
+
+        public async Task ChangeManagerAsync(ProjectDTO projectDTO, UserDTO manager)
+        {
+            var searchedProject = await _unitOfWork.ProjectRepository
+                .GetByIdAsync(projectDTO.Id);
+
+            if(searchedProject != null)
+            {
+                var searchedUser = await _unitOfWork.UserRepository
+                    .GetByIdAsync(manager.Id);
+
+                if (searchedUser != null)
+                {
+                    if(searchedUser.Role != UserRole.Manager)
+                    {
+                        //TODO: add exception / maybe this check wont be needed
+                    }
+
+                    searchedUser.Project = searchedProject;
+                    searchedProject.Manager = searchedUser;
+
+                    await _unitOfWork.UserRepository.UpdateAsync(searchedUser);
+                    await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
+                }
+                else
+                {
+                    //TODO: add exception {not found exception}
+                }
+            }
+        }
+
+        public async Task CreateProjectAsync(ProjectDTO projectDTO, UserDTO manager)
+        {
+            var searchedUser = await _unitOfWork.UserRepository
+                .GetByIdAsync(manager.Id);
+
+            if (searchedUser != null)
+            {
+                if(searchedUser.Role != UserRole.Manager)
+                {
+                    //Exception {inapropriate role}
+                }
+
+                var mappedProject = _mapper.Map<Project>(projectDTO);
+
+                await _unitOfWork.ProjectRepository.AddAsync(mappedProject);
+            }
+            else
+            {
+                //Exception {not found}
+            }
+        }
+
+        public async Task DeleteProjectAsync(ProjectDTO projectDTO, UserDTO manager)
+        {
+            var searchedUser = await _unitOfWork.UserRepository
+                .GetByIdAsync(manager.Id);
+
+            if(searchedUser != null)
+            {
+                var searchedProject = await _unitOfWork.ProjectRepository
+                    .GetByIdAsync(projectDTO.Id);
+
+                if(searchedProject != null)
+                {
+                    if (searchedUser.Role != UserRole.Manager)
+                    {
+                        //exception
+                    }
+
+                    var projects = await _unitOfWork.ProjectRepository
+                        .GetAllAsync();
+
+                    //prbbly should change it
+                    bool isProjectManager = projects
+                        .Exists(x => x.Manager.Id == manager.Id);
+
+                    if (isProjectManager)
+                    {
+                        await _unitOfWork.ProjectRepository.DeleteAsync(searchedProject);
+                    }
+                    else
+                    {
+                        //exception or result
+                    }
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+                
+            }
+        }
 
     }
 }

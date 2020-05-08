@@ -1,4 +1,5 @@
 ﻿using DAL.Entities.Abstract;
+using DAL.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,6 +12,7 @@ namespace DAL.Entities
 
         public string Name { get; set; }
         public string UserContactsId { get; set; }
+        public UserRole Role { get; set; }
         public int ProjectId { get; set; }
 
         public UserContacts UserContacts { get; set; }
