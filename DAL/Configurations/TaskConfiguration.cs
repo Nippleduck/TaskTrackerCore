@@ -7,11 +7,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DAL.Configurations
 {
-    class TaskConfiguration : IEntityTypeConfiguration<Task>
+    public class TaskConfiguration : IEntityTypeConfiguration<Task>
     {
         public void Configure(EntityTypeBuilder<Task> builder)
         {
-            throw new NotImplementedException();
+            builder.Property(t => t.Title)
+                .HasMaxLength(50)
+                .IsRequired();
         }
     }
 }

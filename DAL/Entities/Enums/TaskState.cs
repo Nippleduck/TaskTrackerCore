@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BLL.Enums
+namespace DAL.Entities.Enums
 {
-    public enum ProjectStatus
+    public enum TaskState
     {
-        Open,
+        Created, 
+        InProgress,
         Finished
     }
 }

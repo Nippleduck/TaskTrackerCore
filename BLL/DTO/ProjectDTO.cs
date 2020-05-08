@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL.Enums;
 using BLL.Mapper;
 using DAL.Entities;
 using System;
@@ -19,6 +20,7 @@ namespace BLL.DTO
         {
             profile.CreateMap<Project, ProjectDTO>()
                 .ForMember(d => d.Manager, opt => opt.MapFrom(src => src.Manager.Name))
+                .ForMember(d => d.Status, opt => opt.MapFrom(src => (int)src.Status))
                 .ReverseMap();
         }
     }
