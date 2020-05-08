@@ -11,8 +11,10 @@ namespace DAL.Entities
 
         public string Name { get; set; }
         public string UserContactsId { get; set; }
+        public int ProjectId { get; set; }
 
         public UserContacts UserContacts { get; set; }
+        public Project Project { get; set; }
         public ICollection<ProjectTask> Tasks { get; set; }
     }
 }
