@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,11 @@ namespace DAL.Repository
         public Task<T> GetByIdAsync(int id)
         {
             return _context.Set<T>().SingleOrDefaultAsync(e => e.Id == id);
+        }
+
+        public Task<T> GetByCriteriaAsync(Expression<Func<T, bool>> criteria)
+        {
+            return _context.Set<T>().SingleOrDefaultAsync(criteria);
         }
 
         public async Task<T> AddAsync(T entity)

@@ -10,8 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using DAL.Base;
 using Microsoft.EntityFrameworkCore;
+using DAL;
 
 namespace API
 {
@@ -29,8 +29,7 @@ namespace API
         {
             services.AddControllers();
 
-            services.AddDbContext<TaskTrackerContext>(opt =>
-            opt.UseSqlServer(Configuration.GetConnectionString("TaskTrackerContext")));
+            services.AddDalServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

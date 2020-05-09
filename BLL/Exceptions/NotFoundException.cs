@@ -4,7 +4,10 @@ using System.Text;
 
 namespace BLL.Exceptions
 {
-    class NotFoundException
+    class NotFoundException : Exception
     {
+        public NotFoundException(string name)
+            : base($"Entity \"{name}\" was not found.") { }
+
     }
 }

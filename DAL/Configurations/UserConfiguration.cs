@@ -14,6 +14,8 @@ namespace DAL.Configurations
             builder.Property(u => u.Name)
                 .HasMaxLength(80)
                 .IsRequired();
+
+            builder.HasIndex(u => u.Name);
         }
     }
 }

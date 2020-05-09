@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using BLL.DTO;
+using BLL.Exceptions;
 using BLL.Services.Base;
 using DAL.Entities;
 using DAL.Entities.Enums;
 using DAL.UnitOfWork;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BLL.Services
@@ -22,28 +22,20 @@ namespace BLL.Services
             var searchedProject = await _unitOfWork.ProjectRepository
                 .GetByIdAsync(projectDTO.Id);
 
-            if (searchedProject != null)
-            {
-                var searchedPerformer = await _unitOfWork.UserRepository
+            if (searchedProject == null)
+                throw new NotFoundException(searchedProject.Title);
+
+            var searchedPerformer = await _unitOfWork.UserRepository
                     .GetByIdAsync(performer.Id);
 
-                if (searchedPerformer != null)
-                {
-                    searchedProject.Users.Add(searchedPerformer);
-                    searchedPerformer.ProjectId = searchedProject.Id;
+            if (searchedPerformer == null)
+                throw new NotFoundException(searchedPerformer.Name);
 
-                    await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
-                    await _unitOfWork.UserRepository.UpdateAsync(searchedPerformer);
-                }
-                else
-                {
-                    //TO DO: add some custom exceptions or result object
-                }
-            }
-            else
-            {
-                //TO DO: exception {not found}
-            }
+            searchedProject.Users.Add(searchedPerformer);
+            searchedPerformer.ProjectId = searchedProject.Id;
+
+            await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
+            await _unitOfWork.UserRepository.UpdateAsync(searchedPerformer);
         }
 
         public async Task ChangeDescriptionAsync(ProjectDTO projectDTO, string description)
@@ -51,16 +43,12 @@ namespace BLL.Services
             var searchedProject = await _unitOfWork.ProjectRepository
                 .GetByIdAsync(projectDTO.Id);
 
-            if(searchedProject != null)
-            {
-                searchedProject.Description = description;
+            if (searchedProject == null)
+                throw new NotFoundException(searchedProject.Title);
 
-                await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
-            }
-            else
-            {
-                //exception {not found}
-            }
+            searchedProject.Description = description;
+
+            await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
         }
 
         public async Task ChangeManagerAsync(ProjectDTO projectDTO, UserDTO manager)
@@ -68,29 +56,25 @@ namespace BLL.Services
             var searchedProject = await _unitOfWork.ProjectRepository
                 .GetByIdAsync(projectDTO.Id);
 
-            if(searchedProject != null)
-            {
-                var searchedUser = await _unitOfWork.UserRepository
+            if (searchedProject == null)
+                throw new NotFoundException(searchedProject.Title);
+
+            var searchedUser = await _unitOfWork.UserRepository
                     .GetByIdAsync(manager.Id);
 
-                if (searchedUser != null)
-                {
-                    if(searchedUser.Role != UserRole.Manager)
-                    {
-                        //TODO: add exception / maybe this check wont be needed
-                    }
+            if (searchedUser == null)
+                throw new NotFoundException(searchedUser.Name);
 
-                    searchedUser.Project = searchedProject;
-                    searchedProject.Manager = searchedUser;
-
-                    await _unitOfWork.UserRepository.UpdateAsync(searchedUser);
-                    await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
-                }
-                else
-                {
-                    //TODO: add exception {not found exception}
-                }
+            if (searchedUser.Role != UserRole.Manager)
+            {
+                //TODO: add exception / maybe this check wont be needed
             }
+
+            searchedUser.Project = searchedProject;
+            searchedProject.Manager = searchedUser;
+
+            await _unitOfWork.UserRepository.UpdateAsync(searchedUser);
+            await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
         }
 
         public async Task CreateProjectAsync(ProjectDTO projectDTO, UserDTO manager)
@@ -98,21 +82,17 @@ namespace BLL.Services
             var searchedUser = await _unitOfWork.UserRepository
                 .GetByIdAsync(manager.Id);
 
-            if (searchedUser != null)
-            {
-                if(searchedUser.Role != UserRole.Manager)
-                {
-                    //Exception {inapropriate role}
-                }
+            if (searchedUser == null)
+                throw new NotFoundException(searchedUser.Name);
 
-                var mappedProject = _mapper.Map<Project>(projectDTO);
-
-                await _unitOfWork.ProjectRepository.AddAsync(mappedProject);
-            }
-            else
+            if (searchedUser.Role != UserRole.Manager)
             {
-                //Exception {not found}
+                //Exception {inapropriate role}
             }
+
+            var mappedProject = _mapper.Map<Project>(projectDTO);
+
+            await _unitOfWork.ProjectRepository.AddAsync(mappedProject);
         }
 
         public async Task DeleteProjectAsync(ProjectDTO projectDTO, UserDTO manager)
@@ -120,44 +100,66 @@ namespace BLL.Services
             var searchedUser = await _unitOfWork.UserRepository
                 .GetByIdAsync(manager.Id);
 
-            if(searchedUser != null)
-            {
-                var searchedProject = await _unitOfWork.ProjectRepository
+            if (searchedUser == null)
+                throw new NotFoundException(searchedUser.Name);
+
+            var searchedProject = await _unitOfWork.ProjectRepository
                     .GetByIdAsync(projectDTO.Id);
 
-                if(searchedProject != null)
-                {
-                    if (searchedUser.Role != UserRole.Manager)
-                    {
-                        //exception
-                    }
+            if (searchedProject == null)
+                throw new NotFoundException(searchedProject.Title);
 
-                    var projects = await _unitOfWork.ProjectRepository
-                        .GetAllAsync();
+            if (searchedUser.Role != UserRole.Manager)
+            {
+                //exception
+            }
 
-                    //prbbly should change it
-                    bool isProjectManager = projects
-                        .Exists(x => x.Manager.Id == manager.Id);
+            var projects = await _unitOfWork.ProjectRepository
+                .GetAllAsync();
 
-                    if (isProjectManager)
-                    {
-                        await _unitOfWork.ProjectRepository.DeleteAsync(searchedProject);
-                    }
-                    else
-                    {
-                        //exception or result
-                    }
-                }
-                else
-                {
+            //prbbly should change it
+            bool isCurrentProjectManager = projects
+                .Exists(x => x.Manager.Id == manager.Id);
 
-                }
+            if (isCurrentProjectManager)
+            {
+                await _unitOfWork.ProjectRepository.DeleteAsync(searchedProject);
             }
             else
             {
-                
+                //exception or result
             }
         }
 
+        public async Task<IEnumerable<ProjectDTO>> GetByManagerAsync(string name)
+        {
+            var searchedUser = await _unitOfWork.UserRepository
+                .GetByCriteriaAsync(x => x.Name == name);
+
+            if (searchedUser == null)
+                throw new NotFoundException(searchedUser.Name);
+
+            var projects = await _unitOfWork.ProjectRepository
+                .GetAllAsync();
+
+            var projectsByManager = projects
+                .Where(x => x.Manager.Name == name).ToList();
+
+            if (projectsByManager == null || projectsByManager.Count == 0)
+                throw new NotFoundException("");
+
+            return _mapper.ProjectTo<ProjectDTO>(projectsByManager as IQueryable);
+        }
+
+        public async Task<ProjectDTO> GetProjectByIdAsync(int id)
+        {
+            var searcherProject = await _unitOfWork.ProjectRepository
+                .GetByIdAsync(id);
+
+            if (searcherProject == null)
+                throw new NotFoundException(searcherProject.Title);
+
+            return _mapper.Map<ProjectDTO>(searcherProject);
+        }
     }
 }
