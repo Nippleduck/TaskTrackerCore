@@ -11,7 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using DAL;
+using DAL.Dependencies;
+using BLL.Dependencies;
 
 namespace API
 {
@@ -29,7 +30,9 @@ namespace API
         {
             services.AddControllers();
 
-            services.AddDalServices(Configuration);
+            services.ConfigureDalDependencies(Configuration);
+
+            services.ConfigureBllDependencies(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -15,8 +15,8 @@ namespace DAL.Entities
         public UserRole Role { get; set; }
         public int ProjectId { get; set; }
 
-        public UserContacts UserContacts { get; set; }
-        public Project Project { get; set; }
-        public ICollection<ProjectTask> Tasks { get; set; }
+        public virtual UserContacts UserContacts { get; set; }
+        public virtual Project Project { get; set; }
+        public virtual ICollection<ProjectTask> Tasks { get; set; }
     }
 }

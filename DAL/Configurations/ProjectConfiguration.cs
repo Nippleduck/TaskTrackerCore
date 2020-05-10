@@ -15,6 +15,12 @@ namespace DAL.Configurations
             builder.Property(p => p.Title)
                 .HasMaxLength(50)
                 .IsRequired();
+
+            builder.HasOne(p => p.Manager)
+                .WithOne(u => u.Project)
+                .HasForeignKey<User>(u => u.ProjectId);
+
+            builder.HasMany(p => p.Users);
         }
     }
 }

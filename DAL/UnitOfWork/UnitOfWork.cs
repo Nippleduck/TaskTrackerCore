@@ -15,14 +15,14 @@ namespace DAL.UnitOfWork
 
         readonly TaskTrackerContext _context;
 
-        readonly IRepository<Project> projectRepository;
-        readonly IRepository<ProjectTask> projectTaskRepository;
-        readonly IRepository<User> userRepository;
-        readonly IRepository<DateInfo> dateInfoRepository;
-        readonly IRepository<ProjectTaskStatus> projectTaskStatusRepository;
-        readonly IRepository<UserContacts> userContactsRepository;
+        IRepository<Project> projectRepository;
+        IRepository<ProjectTask> projectTaskRepository;
+        IRepository<User> userRepository;
+        IRepository<DateInfo> dateInfoRepository;
+        IRepository<ProjectTaskStatus> projectTaskStatusRepository;
+        IRepository<UserContacts> userContactsRepository;
 
-        public IRepository<Project> ProjectRepository =>
+        public IRepository<Project> ProjectRepository => 
             projectRepository ?? new Repository<Project>(_context);
 
         public IRepository<ProjectTask> ProjectTaskRepository =>

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using BLL.Enums;
 using BLL.Mapper;
 using DAL.Entities;
+using DAL.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +12,7 @@ namespace BLL.DTO
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public string Descrition { get; set; }
+        public string Description { get; set; }
         public int Status { get; set; }
         public string Manager { get; set; }
 
@@ -20,8 +20,12 @@ namespace BLL.DTO
         {
             profile.CreateMap<Project, ProjectDTO>()
                 .ForMember(d => d.Manager, opt => opt.MapFrom(src => src.Manager.Name))
-                .ForMember(d => d.Status, opt => opt.MapFrom(src => (int)src.Status))
-                .ReverseMap();
+                .ForMember(d => d.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(d => d.Status, opt => opt.MapFrom(src => src.Status))
+                .ReverseMap()
+                .ForPath(s => s.Manager.Name, opt => opt.MapFrom(src => src.Manager))
+                .ForPath(s => s.Description, opt => opt.MapFrom(src => src.Description))
+                .ForPath(s => s.Status, opt => opt.MapFrom(src => src.Status));
         }
     }
 }

@@ -2,6 +2,7 @@
 using BLL.DTO;
 using BLL.Exceptions;
 using BLL.Services.Base;
+using BLL.Services.Interfaces;
 using DAL.Entities;
 using DAL.Entities.Enums;
 using DAL.UnitOfWork;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace BLL.Services
 {
     //TODO: add XML annotations to non-trivial methods
-    public class ProjectService : BaseService
+    public class ProjectService : BaseService, IProjectService
     {
         public ProjectService(IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper) { }
@@ -32,7 +33,7 @@ namespace BLL.Services
                 throw new NotFoundException(searchedPerformer.Name);
 
             searchedProject.Users.Add(searchedPerformer);
-            searchedPerformer.ProjectId = searchedProject.Id;
+            searchedPerformer.Project = searchedProject;
 
             await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
             await _unitOfWork.UserRepository.UpdateAsync(searchedPerformer);
@@ -79,17 +80,6 @@ namespace BLL.Services
 
         public async Task CreateProjectAsync(ProjectDTO projectDTO, UserDTO manager)
         {
-            var searchedUser = await _unitOfWork.UserRepository
-                .GetByIdAsync(manager.Id);
-
-            if (searchedUser == null)
-                throw new NotFoundException(searchedUser.Name);
-
-            if (searchedUser.Role != UserRole.Manager)
-            {
-                //Exception {inapropriate role}
-            }
-
             var mappedProject = _mapper.Map<Project>(projectDTO);
 
             await _unitOfWork.ProjectRepository.AddAsync(mappedProject);
