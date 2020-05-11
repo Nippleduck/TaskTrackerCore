@@ -78,7 +78,7 @@ namespace BLL.Services
             await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
         }
 
-        public async Task CreateProjectAsync(ProjectDTO projectDTO, UserDTO manager)
+        public async Task CreateProjectAsync(ProjectDTO projectDTO)
         {
             var mappedProject = _mapper.Map<Project>(projectDTO);
 

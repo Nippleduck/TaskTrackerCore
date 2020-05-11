@@ -31,23 +31,9 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("project/add")]
-        public async Task<IActionResult> AddProjectAsync()
+        public async Task<IActionResult> AddProjectAsync([FromBody] ProjectDTO projectDTO)
         {
-            UserDTO manager = new UserDTO
-            {
-                Id = 1,
-                Name = "Marcus Person"
-            };
-
-            ProjectDTO project = new ProjectDTO
-            {
-                Title = "EF Test",
-                Description = "testing",
-                Status = 0,
-                Manager = "Marcus Person"
-            };
-
-            await _projectService.CreateProjectAsync(project, manager);
+            await _projectService.CreateProjectAsync(projectDTO);
 
             return Ok();
         }
