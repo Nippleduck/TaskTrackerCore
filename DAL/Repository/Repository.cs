@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
-    public class Repository<T> : IRepository<T>
+    internal class Repository<T> : IRepository<T>
         where T : BaseEntity<int>
     {
 

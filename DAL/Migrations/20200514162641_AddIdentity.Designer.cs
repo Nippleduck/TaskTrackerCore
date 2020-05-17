@@ -4,14 +4,16 @@ using DAL.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(TaskTrackerContext))]
-    partial class TaskTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20200514162641_AddIdentity")]
+    partial class AddIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,7 +192,7 @@ namespace DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<string>("IdentityId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -215,7 +217,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("IdentityId");
 
                     b.HasIndex("Name");
 
@@ -325,12 +327,10 @@ namespace DAL.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -367,12 +367,10 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -403,12 +401,12 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.ProjectUser", b =>
                 {
-                    b.HasOne("DAL.Entities.IdentityModel.ApplicationUser", "ApplicationUser")
+                    b.HasOne("DAL.Entities.IdentityModel.ApplicationUser", "Identity")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("IdentityId");
 
                     b.HasOne("DAL.Entities.Project", "Project")
-                        .WithOne("ProjectManager")
+                        .WithOne("Manager")
                         .HasForeignKey("DAL.Entities.ProjectUser", "ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

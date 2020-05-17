@@ -8,9 +8,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [Authorize]
     [ApiController]
     public class ProjectController : ControllerBase
     {

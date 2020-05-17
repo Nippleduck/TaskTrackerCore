@@ -1,18 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 using DAL.Dependencies;
 using BLL.Dependencies;
+using API.Configurations;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using API.Services.AuthEmailSender;
+using API.Models.Settings;
 
 namespace API
 {
@@ -25,17 +21,20 @@ namespace API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {       
+
             services.AddControllers();
 
-            services.ConfigureDalDependencies(Configuration);
+            services.AddDalConfiguration(Configuration);
 
-            services.ConfigureBllDependencies(Configuration);
+            services.AddBllConfiguration();
+
+            services.AddJwtConfiguration(Configuration);
+
+            services.AddEmailSenderConfiguration(Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -43,10 +42,17 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder =>
+            builder.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyOrigin()
+            );
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

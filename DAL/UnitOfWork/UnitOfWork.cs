@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DAL.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    internal class UnitOfWork : IUnitOfWork, IDisposable
     {
         public UnitOfWork(TaskTrackerContext context) =>
             _context = context;
@@ -17,7 +17,7 @@ namespace DAL.UnitOfWork
 
         IRepository<Project> projectRepository;
         IRepository<ProjectTask> projectTaskRepository;
-        IRepository<User> userRepository;
+        IRepository<ProjectUser> userRepository;
         IRepository<DateInfo> dateInfoRepository;
         IRepository<ProjectTaskStatus> projectTaskStatusRepository;
         IRepository<UserContacts> userContactsRepository;
@@ -28,8 +28,8 @@ namespace DAL.UnitOfWork
         public IRepository<ProjectTask> ProjectTaskRepository =>
             projectTaskRepository ?? new Repository<ProjectTask>(_context);
 
-        public IRepository<User> UserRepository =>
-            userRepository ?? new Repository<User>(_context);
+        public IRepository<ProjectUser> UserRepository =>
+            userRepository ?? new Repository<ProjectUser>(_context);
 
         public IRepository<DateInfo> DateInfoRepository =>
             dateInfoRepository ?? new Repository<DateInfo>(_context);

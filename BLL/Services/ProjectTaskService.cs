@@ -2,6 +2,7 @@
 using BLL.DTO;
 using BLL.Exceptions;
 using BLL.Services.Base;
+using BLL.Services.Interfaces;
 using DAL.Entities;
 using DAL.UnitOfWork;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Services
 {
-    class ProjectTaskService : BaseService
+    internal class ProjectTaskService : BaseService, IProjectTaskService
     {
         public ProjectTaskService(IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper) { }

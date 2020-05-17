@@ -11,17 +11,17 @@ namespace DAL.Entities
         public Project()
         {
             Tasks = new HashSet<ProjectTask>();
-            Users = new HashSet<User>();
+            Users = new HashSet<ProjectUser>();
         }
 
         public string Title { get; set; }
         public string Description { get; set; }
         public ProjectStatus Status { get; set; }
 
-        public virtual User Manager { get; set; }
+        public virtual ProjectUser ProjectManager { get; set; }
 
         public virtual ICollection<ProjectTask> Tasks { get; set; }
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<ProjectUser> Users { get; set; }
         
     }
 }

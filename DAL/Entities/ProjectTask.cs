@@ -12,6 +12,6 @@ namespace DAL.Entities
 
         public virtual ProjectTaskStatus TaskStatus { get; set; }
         public virtual DateInfo DateInfo { get; set; }
-        public virtual User Performer { get; set; }
+        public virtual ProjectUser Performer { get; set; }
     }
 }

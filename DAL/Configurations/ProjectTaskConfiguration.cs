@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DAL.Configurations
 {
-    public class TaskConfiguration : IEntityTypeConfiguration<ProjectTask>
+    internal class ProjectTaskConfiguration : IEntityTypeConfiguration<ProjectTask>
     {
         public void Configure(EntityTypeBuilder<ProjectTask> builder)
         {

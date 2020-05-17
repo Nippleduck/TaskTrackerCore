@@ -8,7 +8,7 @@ using System.Text;
 
 namespace DAL.Configurations
 {
-    public class ProjectConfiguration : IEntityTypeConfiguration<Project>
+    internal class ProjectConfiguration : IEntityTypeConfiguration<Project>
     {
         public void Configure(EntityTypeBuilder<Project> builder)
         {
@@ -16,9 +16,9 @@ namespace DAL.Configurations
                 .HasMaxLength(50)
                 .IsRequired();
 
-            builder.HasOne(p => p.Manager)
+            builder.HasOne(p => p.ProjectManager)
                 .WithOne(u => u.Project)
-                .HasForeignKey<User>(u => u.ProjectId);
+                .HasForeignKey<ProjectUser>(u => u.ProjectId);
 
             builder.HasMany(p => p.Users);
         }

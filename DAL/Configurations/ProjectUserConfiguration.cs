@@ -7,9 +7,9 @@ using System.Text;
 
 namespace DAL.Configurations
 {
-    class UserConfiguration : IEntityTypeConfiguration<User>
+    internal class ProjectUserConfiguration : IEntityTypeConfiguration<ProjectUser>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<ProjectUser> builder)
         {
             builder.Property(u => u.Name)
                 .HasMaxLength(80)

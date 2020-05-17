@@ -21,10 +21,14 @@ namespace BLL.DTO
         {
             profile.CreateMap<ProjectTask, ProjectTaskDTO>()
                 .ForMember(d => d.ExecutedPercent, opt => opt.MapFrom(src => src.TaskStatus.ExecutedPercent))
-                .ForMember(d => d.State, opt => opt.MapFrom(src => (int)src.TaskStatus.State))
+                .ForMember(d => d.State, opt => opt.MapFrom(src => src.TaskStatus.State))
                 .ForMember(d => d.BeginDate, opt => opt.MapFrom(src => src.DateInfo.BeginDate))
                 .ForMember(d => d.Deadline, opt => opt.MapFrom(src => src.DateInfo.Deadline))
-                .ReverseMap();
+                .ReverseMap()
+                .ForPath(s => s.TaskStatus.ExecutedPercent, opt => opt.MapFrom(src => src.ExecutedPercent))
+                .ForPath(s => s.TaskStatus.State, opt => opt.MapFrom(src => src.State))
+                .ForPath(s => s.DateInfo.BeginDate, opt => opt.MapFrom(src => src.BeginDate))
+                .ForPath(s => s.DateInfo.Deadline, opt => opt.MapFrom(src => src.Deadline));
         }
     }
 }

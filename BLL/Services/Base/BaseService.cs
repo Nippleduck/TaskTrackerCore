@@ -7,7 +7,7 @@ using DAL.UnitOfWork;
 
 namespace BLL.Services.Base
 {
-    public abstract class BaseService
+    internal abstract class BaseService
     {
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IMapper _mapper;

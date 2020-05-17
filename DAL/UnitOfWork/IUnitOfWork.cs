@@ -11,7 +11,7 @@ namespace DAL.UnitOfWork
     {
         IRepository<Project> ProjectRepository { get; }
         IRepository<ProjectTask> ProjectTaskRepository { get; }
-        IRepository<User> UserRepository { get; }
+        IRepository<ProjectUser> UserRepository { get; }
         IRepository<DateInfo> DateInfoRepository { get;}
         IRepository<ProjectTaskStatus> ProjectTaskStatusRepository { get;}
         IRepository<UserContacts> UserContactsRepository { get;}

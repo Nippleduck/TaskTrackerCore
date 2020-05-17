@@ -1,21 +1,21 @@
 ﻿using AutoMapper;
+using BLL.JwtAuth;
 using BLL.Services;
 using BLL.Services.Interfaces;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace BLL.Dependencies
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection ConfigureBllDependencies
-            (this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddBllConfiguration
+            (this IServiceCollection services)
         {
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IProjectTaskService, ProjectTaskService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<IJwtFactory, JwtFactory>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

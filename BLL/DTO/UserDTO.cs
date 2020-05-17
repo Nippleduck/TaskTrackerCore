@@ -7,7 +7,7 @@ using System.Text;
 
 namespace BLL.DTO
 {
-    public class UserDTO : IMapFrom<User>
+    public class UserDTO : IMapFrom<ProjectUser>
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -17,11 +17,14 @@ namespace BLL.DTO
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<User, UserDTO>()
+            profile.CreateMap<ProjectUser, UserDTO>()
                 .ForMember(d => d.Email, opt => opt.MapFrom(src => src.UserContacts.Email))
                 .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.UserContacts.PhoneNumber))
                 .ForMember(d => d.Role, opt => opt.MapFrom(src => (int)src.Role))
-                .ReverseMap();
+                .ReverseMap()
+                .ForPath(s => s.UserContacts.Email, opt => opt.MapFrom(src => src.Email))
+                .ForPath(s => s.UserContacts.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForPath(s => s.Role, opt => opt.MapFrom(src => src.Role));
         }
     }
 }

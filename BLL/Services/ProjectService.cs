@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace BLL.Services
 {
     //TODO: add XML annotations to non-trivial methods
-    public class ProjectService : BaseService, IProjectService
+    internal class ProjectService : BaseService, IProjectService
     {
         public ProjectService(IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper) { }
@@ -72,7 +72,7 @@ namespace BLL.Services
             }
 
             searchedUser.Project = searchedProject;
-            searchedProject.Manager = searchedUser;
+            searchedProject.ProjectManager = searchedUser;
 
             await _unitOfWork.UserRepository.UpdateAsync(searchedUser);
             await _unitOfWork.ProjectRepository.UpdateAsync(searchedProject);
@@ -109,7 +109,7 @@ namespace BLL.Services
 
             //prbbly should change it
             bool isCurrentProjectManager = projects
-                .Exists(x => x.Manager.Id == manager.Id);
+                .Exists(x => x.ProjectManager.Id == manager.Id);
 
             if (isCurrentProjectManager)
             {
@@ -133,7 +133,7 @@ namespace BLL.Services
                 .GetAllAsync();
 
             var projectsByManager = projects
-                .Where(x => x.Manager.Name == name).ToList();
+                .Where(x => x.ProjectManager.Name == name).ToList();
 
             if (projectsByManager == null || projectsByManager.Count == 0)
                 throw new NotFoundException("");

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL.Configurations
 {
-    class DateInfoConfiguration : IEntityTypeConfiguration<DateInfo>
+    internal class DateInfoConfiguration : IEntityTypeConfiguration<DateInfo>
     {
         public void Configure(EntityTypeBuilder<DateInfo> builder)
         {
