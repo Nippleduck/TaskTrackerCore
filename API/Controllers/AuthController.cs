@@ -43,20 +43,24 @@ namespace API.Controllers
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(appUser, model.Role);
+
                 var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
 
                 var callbackUrl = Url.Action(
                     "ConfirmEmail",
                     "Auth",
                     new { UserId = appUser.Id, EmailToken = emailToken },
-                    protocol: HttpContext.Request.Scheme);
+                    HttpContext.Request.Scheme);
 
-                await _emailSender.SendEmailAsync(appUser.Email,
+                await _emailSender.SendEmailAsync(
+                    appUser.Email,
                     "TaskTracker - Confirm Your Email",
                     "Please confirm your e-mail by clicking this link: <a href=\"" + callbackUrl + "\">click here</a>");
-            }
 
-            return Ok(result);
+                return Ok(result);
+            }
+            else return BadRequest(new { message = "error"});
         }
 
         [HttpPost]
@@ -70,7 +74,9 @@ namespace API.Controllers
 
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var token = await _jwtFactory.GenerateEncodedToken(user.Id, user.UserName);
+                var roles = await _userManager.GetRolesAsync(user);
+
+                var token = await _jwtFactory.GenerateEncodedToken(user.Id, user.UserName, roles.FirstOrDefault());
 
                 return Ok(token);
             }

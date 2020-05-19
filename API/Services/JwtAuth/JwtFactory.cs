@@ -1,5 +1,5 @@
-﻿using BLL.JwtAuth.IssuerOptions;
-using BLL.JwtAuth.TokenModel;
+﻿using API.Services.JwtAuth.IssuerOptions;
+using API.Services.JwtAuth.TokenModel;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace API.Services.JwtAuth
         public JwtFactory(IOptions<JwtIssuerOptions> jwtOptions) =>
             _jwtOptions = jwtOptions.Value;
 
-        public async Task<AccessToken> GenerateEncodedToken(string id, string userName)
+        public async Task<AccessToken> GenerateEncodedToken(string id, string userName, string role)
         {
            
             var claims = new[]
@@ -27,8 +27,8 @@ namespace API.Services.JwtAuth
                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.GenerateJti()),
                 new Claim(JwtRegisteredClaimNames.Iat, _jwtOptions.IssuedAt.ToString(), ClaimValueTypes.Integer64),
 
-                new Claim("id", id),
-                new Claim("rol","performer")
+                new Claim(ClaimTypes.NameIdentifier, id),
+                new Claim(ClaimTypes.Role , role)
             };
 
             var jwt = new JwtSecurityToken(

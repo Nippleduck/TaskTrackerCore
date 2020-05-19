@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BLL.JwtAuth;
 using BLL.Services;
 using BLL.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +14,6 @@ namespace BLL.Dependencies
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IProjectTaskService, ProjectTaskService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddSingleton<IJwtFactory, JwtFactory>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

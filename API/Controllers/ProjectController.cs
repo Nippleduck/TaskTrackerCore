@@ -23,6 +23,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("project/{id}")]
+        [Authorize(Policy = "RequirePerformerRole")]
         public async Task<IActionResult> GetProject(int id)
         {
             var project = await _projectService.

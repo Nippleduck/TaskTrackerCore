@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using API.Services.JwtAuth;
 
 namespace API.Configurations
 {
@@ -13,6 +14,8 @@ namespace API.Configurations
     {
         public static IServiceCollection AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<IJwtFactory, JwtFactory>();
+
             var authSettings = configuration.GetSection(nameof(AuthSettings));
             services.Configure<AuthSettings>(authSettings);
             
@@ -53,6 +56,12 @@ namespace API.Configurations
                 config.TokenValidationParameters = tokenValidationParameters;
                 config.SaveToken = true;
 
+            });
+
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("RequirePerformerRole", policy => policy.RequireRole("Performer").RequireAuthenticatedUser());
+                opt.AddPolicy("RequireManagerRole", policy => policy.RequireRole("Manager").RequireAuthenticatedUser());
             });
 
             return services;

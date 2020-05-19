@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL.UnitOfWork;
 using DAL.Entities.IdentityModel;
 using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace DAL.Dependencies
 {
@@ -18,7 +19,7 @@ namespace DAL.Dependencies
             UseSqlServer(configuration.
             GetConnectionString("TaskTrackerDataBase")));
 
-            services.AddDefaultIdentity<ApplicationUser>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<TaskTrackerContext>();
 
             services.Configure<IdentityOptions>(opt =>
@@ -28,6 +29,12 @@ namespace DAL.Dependencies
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequiredLength = 6;
+
+                opt.User.RequireUniqueEmail = true;
+
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                opt.Lockout.MaxFailedAccessAttempts = 5;
+                opt.Lockout.AllowedForNewUsers = true;
             });
 
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
