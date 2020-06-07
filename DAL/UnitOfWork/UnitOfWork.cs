@@ -1,5 +1,6 @@
 ﻿using DAL.Base;
 using DAL.Entities;
+using DAL.Entities.TokenModel;
 using DAL.Repository;
 using System;
 using System.Collections.Generic;
@@ -23,22 +24,22 @@ namespace DAL.UnitOfWork
         IRepository<UserContacts> userContactsRepository;
 
         public IRepository<Project> ProjectRepository => 
-            projectRepository ?? new Repository<Project>(_context);
+            projectRepository ??= new Repository<Project>(_context);
 
         public IRepository<ProjectTask> ProjectTaskRepository =>
-            projectTaskRepository ?? new Repository<ProjectTask>(_context);
+            projectTaskRepository ??= new Repository<ProjectTask>(_context);
 
         public IRepository<ProjectUser> UserRepository =>
-            userRepository ?? new Repository<ProjectUser>(_context);
+            userRepository ??= new Repository<ProjectUser>(_context);
 
         public IRepository<DateInfo> DateInfoRepository =>
-            dateInfoRepository ?? new Repository<DateInfo>(_context);
+            dateInfoRepository ??= new Repository<DateInfo>(_context);
 
         public IRepository<ProjectTaskStatus> ProjectTaskStatusRepository =>
-            projectTaskStatusRepository ?? new Repository<ProjectTaskStatus>(_context);
+            projectTaskStatusRepository ??= new Repository<ProjectTaskStatus>(_context);
 
         public IRepository<UserContacts> UserContactsRepository =>
-            userContactsRepository ?? new Repository<UserContacts>(_context);
+            userContactsRepository ??= new Repository<UserContacts>(_context);
 
         public void SaveChanges()
         {

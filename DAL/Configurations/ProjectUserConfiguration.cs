@@ -11,6 +11,9 @@ namespace DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<ProjectUser> builder)
         {
+            var navigation = builder.Metadata.FindNavigation(nameof(ProjectUser.RefreshTokens));
+            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
             builder.Property(u => u.Name)
                 .HasMaxLength(80)
                 .IsRequired();

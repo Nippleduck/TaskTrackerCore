@@ -1,4 +1,5 @@
 ﻿using DAL.Entities;
+using DAL.Entities.TokenModel;
 using DAL.Repository;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,8 @@ namespace DAL.UnitOfWork
         IRepository<Project> ProjectRepository { get; }
         IRepository<ProjectTask> ProjectTaskRepository { get; }
         IRepository<ProjectUser> UserRepository { get; }
-        IRepository<DateInfo> DateInfoRepository { get;}
-        IRepository<ProjectTaskStatus> ProjectTaskStatusRepository { get;}
+        IRepository<DateInfo> DateInfoRepository { get; }
+        IRepository<ProjectTaskStatus> ProjectTaskStatusRepository { get; }
         IRepository<UserContacts> UserContactsRepository { get;}
 
         void SaveChanges();

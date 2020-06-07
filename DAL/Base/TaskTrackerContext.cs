@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using DAL.Entities.IdentityModel;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using DAL.Entities.TokenModel;
 
 namespace DAL.Base
 {
@@ -17,6 +18,7 @@ namespace DAL.Base
         public DbSet<DateInfo> DateInfos { get; set; }
         public DbSet<ProjectTaskStatus> TaskStatuses { get; set; }
         public DbSet<UserContacts> UserContacts { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
