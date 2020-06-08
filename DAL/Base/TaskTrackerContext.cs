@@ -7,7 +7,7 @@ using DAL.Entities.TokenModel;
 
 namespace DAL.Base
 {
-    internal class TaskTrackerContext : IdentityDbContext<ApplicationUser>
+    public class TaskTrackerContext : IdentityDbContext<ApplicationUser>
     {
         public TaskTrackerContext(DbContextOptions<TaskTrackerContext> options)
             : base(options) { }

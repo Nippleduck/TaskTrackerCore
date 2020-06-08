@@ -13,9 +13,8 @@ namespace DAL.Entities
         public ProjectUser() => Tasks = new HashSet<ProjectTask>();
 
         public string Name { get; set; }
-        public string UserContactsId { get; set; }
         public UserRole Role { get; set; }
-        public int ProjectId { get; set; }
+        public int? ProjectId { get; set; }
         public string ApplicationUserId { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace BLL.Services
 {
     //TODO: add XML annotations to non-trivial methods
-    internal class ProjectService : BaseService, IProjectService
+    public class ProjectService : BaseService, IProjectService
     {
         public ProjectService(IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper) { }

@@ -13,6 +13,12 @@
     <Compile Remove="Migrations\20200517110032_NewInitial.Designer.cs" />
     <Compile Remove="Migrations\20200517112212_PropFixAddit.cs" />
     <Compile Remove="Migrations\20200517112212_PropFixAddit.Designer.cs" />
+    <Compile Remove="Migrations\20200607205135_fix.cs" />
+    <Compile Remove="Migrations\20200607205135_fix.Designer.cs" />
+    <Compile Remove="Migrations\20200607223111_newFix.cs" />
+    <Compile Remove="Migrations\20200607223111_newFix.Designer.cs" />
+    <Compile Remove="Migrations\20200608072759_fixRelations.cs" />
+    <Compile Remove="Migrations\20200608072759_fixRelations.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

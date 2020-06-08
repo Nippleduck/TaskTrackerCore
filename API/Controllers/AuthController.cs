@@ -12,6 +12,8 @@ using API.Services.JwtAuth.Interfaces;
 using BLL.DTO;
 using API.Models.Settings;
 using System.Security.Claims;
+using DAL.Base;
+using DAL.Entities;
 
 namespace API.Controllers
 {
@@ -56,12 +58,18 @@ namespace API.Controllers
             
             if (userCreateResult.Succeeded)
             {
-                await _userService.CreateUserAsync(new UserDTO 
-                { 
+
+
+                await _userService.CreateUserAsync(new UserDTO
+                {
                     Name = model.UserName,
                     Email = model.Email,
-                    ApplicationUserId = appUser.Id
+                    Role = 1,
+                    ApplicationUserId = appUser.Id,
                 });
+
+
+
 
                 //await _userManager.AddToRoleAsync(appUser, model.Role);
 
