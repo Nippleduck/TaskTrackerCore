@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace TaskTrakerCore.UnitTests
+namespace TaskTrakerCore.UnitTests.TestConfigurations
 {
     public static class DbContextFactory
     {

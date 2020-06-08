@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TaskTrakerCore.UnitTests
+namespace TaskTrakerCore.UnitTests.TestConfigurations
 {
     public class TestBaseFixture : IDisposable
     {

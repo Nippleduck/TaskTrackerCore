@@ -5,35 +5,28 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
-using Moq;
 using DAL.UnitOfWork;
 using DAL.Entities;
 using System.Threading.Tasks;
 using BLL.DTO;
+using TaskTrakerCore.UnitTests.TestConfigurations;
 
 namespace TaskTrakerCore.UnitTests.Services
 {
     public class ProjectServiceTest : TestBaseFixture
     {
-        public ProjectServiceTest() :base()
+        readonly IProjectService projectService;
+        public ProjectServiceTest() : base() =>
+            projectService = new ProjectService(new UnitOfWork(Context), Mapper);
+
+        [Theory]
+        [InlineData(1)]
+        public void ShouldReturnExpectedProjectWitTitle(int id)
         {
-           
-        }
 
-        [Fact]
-        public void FirstTest()
-        {
-            var uofMock = new Mock<IUnitOfWork>();
-            uofMock.Setup(a => a.ProjectRepository.GetByIdAsync(1))
-                .Returns(new Task<Project>(() => new Project { Title = "TestTitle" }));
-
-            IProjectService projectService = new ProjectService(uofMock.Object, Mapper);
-
-            var uof = new UnitOfWork(Context);
-            var result = uof.ProjectRepository.GetByIdAsync(1);
-
-           
-            var expectedProject = new Project { Title = "TestTitle" };
+            var result = projectService.GetProjectByIdAsync(id);
+       
+            var expectedProject = new Project { Title = "Web application" };
 
             Assert.Equal(expectedProject.Title, result.Result.Title);
         }
