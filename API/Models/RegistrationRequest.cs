@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace API.Models
 {
-    public class RegistrationViewModel
+    public class RegistrationRequest
     {
         public string Email { get; set; }
         public string UserName { get; set; }

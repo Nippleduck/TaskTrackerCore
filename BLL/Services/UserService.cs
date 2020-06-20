@@ -29,6 +29,17 @@ namespace BLL.Services
             await _unitOfWork.UserRepository.AddAsync(mappedUser);
         }
 
+        public async Task<UserDTO> GetUserByIdAsync(int id)
+        {
+            var searchedUser = await _unitOfWork.UserRepository.GetByIdAsync(id);
+
+            if (searchedUser == null) throw new NotFoundException($"User with that id not found");
+
+            var mappedUser = _mapper.Map<UserDTO>(searchedUser);
+
+            return mappedUser;
+        }
+
         public async Task<UserDTO> GetUserByNameAsync(string name)
         {
             var searchedUser = await _unitOfWork.UserRepository.GetByCriteriaAsync(u => u.Name == name);
@@ -64,6 +75,18 @@ namespace BLL.Services
             if (searchedUser == null) throw new NotFoundException("User with that Id not found");
 
             searchedUser.AddRefreshToken(refreshToken, identityId);
+
+            await _unitOfWork.UserRepository.UpdateAsync(searchedUser);
+        }
+
+        public async Task RemoveRefreshTokenAsync(string refreshToken, string identityId)
+        {
+            var searchedUser = await _unitOfWork.UserRepository
+                .GetByCriteriaAsync(u => u.ApplicationUserId == identityId);
+
+            if (searchedUser == null) throw new NotFoundException("User with that Id not found");
+
+            searchedUser.RemoveRefreshToken(refreshToken);
 
             await _unitOfWork.UserRepository.UpdateAsync(searchedUser);
         }

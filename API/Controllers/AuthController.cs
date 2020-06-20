@@ -44,7 +44,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("auth/register")]
-        public async Task<IActionResult> Register([FromBody] RegistrationViewModel model)
+        public async Task<IActionResult> Register([FromBody] RegistrationRequest model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -93,7 +93,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("auth/login")]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -114,9 +114,22 @@ namespace API.Controllers
             else return BadRequest(new { message = "Incorrect user info" });
         }
 
+        public async Task<IActionResult> Logout([FromBody] LogoutRequest model)
+        {
+            var principal = _tokenValidator.GetPrincipalFromToken(model.AccessToken, _authSettings.SecretKey);
+
+            if (principal == null) return BadRequest(new { message = "Invalid token" });
+
+            var id = principal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier);
+
+            await _userService.RemoveRefreshTokenAsync(model.RefreshToken, id.Value);
+
+            return Ok(new { message = "token successfuly removed" });
+        }
+
         [HttpPost]
         [Route("auth/refreshToken")]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenViewModel model)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest model)
         {
             var principal = _tokenValidator.GetPrincipalFromToken(model.AccessToken, _authSettings.SecretKey);
 
