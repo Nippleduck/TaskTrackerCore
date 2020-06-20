@@ -27,9 +27,13 @@ namespace TaskTrakerCore.UnitTests.Mappings
         [InlineData(typeof(ProjectUser), typeof(UserDTO))]
         public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
         {
-            var instance = Activator.CreateInstance(source);
+            var project = new Project { Title = "test" };
 
-            mapper.Map(instance, source, destination);
+            var result = mapper.Map<ProjectDTO>(project);
+
+            var expected = new ProjectDTO { Title = "test" };
+
+            Assert.Equal(expected.Title, result.Title);
         }
     }
 }

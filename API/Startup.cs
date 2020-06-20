@@ -9,6 +9,7 @@ using API.Configurations;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using API.Services.AuthEmailSender;
 using API.Models.Settings;
+using API.ExceptionHandler;
 
 namespace API
 {
@@ -24,7 +25,8 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {       
 
-            services.AddControllers();
+            services.AddControllers(opt =>
+            opt.Filters.Add(new ExceptionHandlingFilter()));
 
             services.AddDalConfiguration(Configuration);
 

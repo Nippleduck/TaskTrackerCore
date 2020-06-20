@@ -4,10 +4,9 @@ using System.Text;
 
 namespace BLL.Exceptions
 {
-    public class NotFoundException : Exception
+    public class InvalidTokenException : Exception
     {
-        public NotFoundException(string message)
+        public InvalidTokenException(string message)
             : base(message) { }
-
     }
 }

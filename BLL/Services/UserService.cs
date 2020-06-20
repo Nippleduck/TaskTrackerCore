@@ -19,6 +19,11 @@ namespace BLL.Services
 
         public async Task CreateUserAsync(UserDTO userDTO)
         {
+            var userExist = await _unitOfWork.UserRepository
+                .GetByCriteriaAsync(u => u.Name == userDTO.Name) != null;
+
+            if (userExist) throw new EntityDuplicateException($"User with name {userDTO.Name} already exists");
+
             var mappedUser = _mapper.Map<ProjectUser>(userDTO);
 
             await _unitOfWork.UserRepository.AddAsync(mappedUser);
@@ -28,7 +33,7 @@ namespace BLL.Services
         {
             var searchedUser = await _unitOfWork.UserRepository.GetByCriteriaAsync(u => u.Name == name);
 
-            if (searchedUser == null) throw new NotFoundException("");
+            if (searchedUser == null) throw new NotFoundException($"User {name} not found");
 
             var mappedUser = _mapper.Map<UserDTO>(searchedUser);
 
@@ -40,10 +45,10 @@ namespace BLL.Services
             var searchedUser = await _unitOfWork.UserRepository
                 .GetByCriteriaAsync(u => u.ApplicationUserId == identityId);
 
-            if (searchedUser == null) throw new NotFoundException("");
+            if (searchedUser == null) throw new NotFoundException("User with that Id not found");
 
             if (!searchedUser.HasValidRefreshToken(oldToken))
-                throw new Exception(""); //create own ex
+                throw new InvalidTokenException("User has no valid token");
 
             searchedUser.RemoveRefreshToken(oldToken);
             searchedUser.AddRefreshToken(newToken, identityId);
@@ -56,7 +61,7 @@ namespace BLL.Services
             var searchedUser = await _unitOfWork.UserRepository
                 .GetByCriteriaAsync(u => u.ApplicationUserId == identityId);
 
-            if (searchedUser == null) throw new NotFoundException("");
+            if (searchedUser == null) throw new NotFoundException("User with that Id not found");
 
             searchedUser.AddRefreshToken(refreshToken, identityId);
 

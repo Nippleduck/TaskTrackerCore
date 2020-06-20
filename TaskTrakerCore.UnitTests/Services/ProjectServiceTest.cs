@@ -16,6 +16,7 @@ namespace TaskTrakerCore.UnitTests.Services
     public class ProjectServiceTest : TestBaseFixture
     {
         readonly IProjectService projectService;
+
         public ProjectServiceTest() : base() =>
             projectService = new ProjectService(new UnitOfWork(Context), Mapper);
 
